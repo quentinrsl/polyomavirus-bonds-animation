@@ -32,7 +32,7 @@ let settings = {
 
 //GUI
 
-let probaController;
+let probaController = null;
 
 let gui = new dat.GUI({name: 'Polyomavirus interaction network',width: 300});
 let tilesGui = gui.addFolder('Tiles');
@@ -42,9 +42,12 @@ gui.addColor(settings,"backgroundColour").name("background")
 gui.add(settings,"displayType",0,2,1).name("display").onFinishChange(() => {
 	updateDisplayedFaces();
 	if(settings.displayType == 1) {
-		probaController = gui.add(settings,"removalProbability",0,1,0.1).name("Fraction removed").onFinishChange(updateDisplayedFaces)
+		if(probaController == null) {
+			probaController = gui.add(settings,"removalProbability",0,1,0.1).name("Fraction removed").onFinishChange(updateDisplayedFaces)
+		}
 	}else {
 		gui.remove(probaController)
+		probaController = null;
 	}
 })
 
