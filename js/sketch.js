@@ -166,38 +166,3 @@ function draw() {
 function mouseDragged(){
 	orbitControl();
 }
-
-// function getAdj(id) {
-// 	let res = []
-// 	let S = ""
-// 	for(let n of FACES[id]) {
-// 	  for(fid in FACES) {
-// 		if(FACES[fid].indexOf(n) != -1 && res.indexOf(fid) == -1) {
-// 		  res.push(fid)
-// 		  if(fid > id) {
-// 			  S += "//	[" + id + "," + fid + ",2],\n"
-// 		  }
-// 		}
-// 	  }
-// 	}
-// 	console.log(S)
-// 	return S
-//   }
-
-// function nodeIndex(x,y,z) {
-// 	P = {x,y,z}
-// 	return NODES.findIndex(({x,y,z}) => {
-// 		let D = (x - P.x) * (x - P.x) + (y - P.y) * (y - P.y) + (z - P.z) * (z - P.z)
-// 		return D < 1e-3
-// 	})
-// }
-// EDGES_ = []
-// for(let {x1,y1,z1,x2,y2,z2} of EDGES) {
-// 	let i1 = nodeIndex(x1,y1,z1)
-// 	let i2 = nodeIndex(x2,y2,z2)
-// 	if(i1 == -1) {
-// 		console.log({x1,y1,z1,x2,y2,z2})
-// 	}
-// 	EDGES_.push([i1,i2])
-// 	// console.log("[",[nodeIndex(x1,y1,z1),nodeIndex(x2,y2,z2)].toString(),"],")
-// }
