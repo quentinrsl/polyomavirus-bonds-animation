@@ -20,8 +20,8 @@ let settings = {
 	networkAcolour: "#fA0000",
 	networkBcolour: "#0064F0",
 	networkCcolour: "#FAAC10",
-	networkNodesSize: 15,
-	networkNodesColour: "#000000",
+	networkNodesSize: 5,
+	networkNodesColour: "#666666",
 	
 	backgroundColour: "#FFFFFF",
 	
@@ -103,17 +103,20 @@ function midPoint(face) {
 	return [x,y,z]
 }
 
+let a =true
+
 function draw() {
 	smooth();
-	orbitControl(3,3)
+	// orbitControl(3,3)
 	background(settings.backgroundColour);
 
 	//Set lighting
-	ambientLight(20,20,20);
+	ambientLight(50,50,50);
 	ambientMaterial(255);
 	strokeWeight(3);
 	pointLight(255, 255, 255, 220, -220, 220);
 	directionalLight(255, 255, 255, -1, 1, -1);
+	directionalLight(100, 100, 100, -1, 1, 1);
 	
 
 	//Draw the hexamers and pentamers
@@ -140,25 +143,38 @@ function draw() {
 	//Draw the interaction network
 	for(let [id1,id2,type] of BONDS) {
 		if(removedBondTypes.indexOf(type) == -1 && displayedFaces.indexOf(id1) != -1 && displayedFaces.indexOf(id2) != -1 && settings.displayNetwork){
-			strokeWeight(settings.networkEdgesWeight);
+			noStroke()
 			if(type==0) {
-				stroke(settings.networkAcolour)
+				fill(settings.networkAcolour)
 			}else if (type == 1) {
-				stroke(settings.networkBcolour)
+				fill(settings.networkBcolour)
 			}else {
-				stroke(settings.networkCcolour)
+				fill(settings.networkCcolour)
 			}
-			beginShape();
 			[x1,y1,z1] = midPoint(FACES[id1]);
 			[x2,y2,z2] = midPoint(FACES[id2]);
-
-			vertex(size*x1 * offsetFactor,size*y1 * offsetFactor,size*z1 * offsetFactor);
-			vertex(size*x2 * offsetFactor,size*y2 * offsetFactor,size*z2 * offsetFactor);
-			endShape()
-			stroke(settings.networkNodesColour)
-			strokeWeight(settings.networkNodesSize)
-			point(size*x1 * offsetFactor,size*y1 * offsetFactor,size*z1 * offsetFactor);
-			point(size*x2 * offsetFactor,size*y2 * offsetFactor,size*z2 * offsetFactor);
+			let v1 = createVector(x1 * size * offsetFactor,y1 * size * offsetFactor,z1 * size * offsetFactor);
+			let v2 = createVector(x2 * size * offsetFactor,y2 * size * offsetFactor,z2 * size * offsetFactor);
+			let direction = p5.Vector.sub(v2, v1);
+			let midpoint = p5.Vector.lerp(v1, v2, 0.5);
+			let axis = createVector(0, 1, 0).cross(direction).normalize()
+			let angle = direction.angleBetween(createVector(0, 1, 0))
+			
+			push()
+			translate(midpoint.x, midpoint.y, midpoint.z);
+			rotate(abs(angle), axis)
+			cylinder(settings.networkEdgesWeight, direction.mag(), 7, 1);
+			pop()
+			
+			fill(settings.networkNodesColour)
+			push()
+			translate(size*x1 * offsetFactor,size*y1 * offsetFactor,size*z1 * offsetFactor);
+			sphere(settings.networkNodesSize,7)
+			pop()
+			push()
+			translate(size*x2 * offsetFactor,size*y2 * offsetFactor,size*z2 * offsetFactor);
+			sphere(settings.networkNodesSize,7)
+			pop()
 		}
 	}
 }
